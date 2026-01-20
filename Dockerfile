@@ -1,21 +1,14 @@
 FROM debian:bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV PORT=10000
 
 RUN apt update && apt install -y \
+    python3 \
     curl \
-    wget \
     nano \
-    ca-certificates \
-    openssh-server \
     && rm -rf /var/lib/apt/lists/*
-
-# SSH setup (optional)
-RUN mkdir /var/run/sshd
-
-# Create user
-RUN useradd -m renderuser && echo "renderuser:render" | chpasswd
 
 EXPOSE 10000
 
-CMD ["sleep", "infinity"]
+CMD ["sh", "-c", "echo Starting server on port $PORT && python3 -m http.server $PORT"]
